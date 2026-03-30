@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lolly — chaotic anime companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="bg-blobs" aria-hidden="true">
+      <span class="blob b1"></span>
+      <span class="blob b2"></span>
+      <span class="blob b3"></span>
+    </div>
+
+    <main class="app">
+      <header class="topbar">
+        <div class="avatar">🍭</div>
+        <div>
+          <h1>Lolly</h1>
+          <p>playful • funny • slightly chaotic</p>
+        </div>
+        <div class="status" id="status">online</div>
+      </header>
+
+      <section id="chat" class="chat" aria-live="polite"></section>
+
+      <div class="chips" id="chips">
+        <button type="button">расскажи мем</button>
+        <button type="button">мне грустно</button>
+        <button type="button">помоги собраться</button>
+      </div>
+
+      <form id="form" class="composer">
+        <input
+          id="input"
+          type="text"
+          autocomplete="off"
+          placeholder="Напиши что-нибудь Лолли..."
+          aria-label="Сообщение"
+          required
+        />
+        <button type="submit">Отправить</button>
+      </form>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

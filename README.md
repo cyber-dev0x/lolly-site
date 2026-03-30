@@ -1,15 +1,17 @@
 # Lolly Site
 
-Мини-сайт с персонажем Lolly (HTML/CSS/JS).
+A meme-styled anime chat mini-site built with plain HTML/CSS/JS.
 
-## Локально
-Открой `index.html` или запусти:
+## Run locally
+Open `index.html` directly, or run:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-## Стек
+Then visit `http://localhost:8000`.
+
+## Stack
 - HTML
 - CSS
-- Vanilla JS
+- Vanilla JavaScript

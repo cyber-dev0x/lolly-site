@@ -7,61 +7,48 @@ const statusEl = document.getElementById('status');
 const state = {
   userHistory: [],
   botHistory: [],
-  turns: 0,
 };
 
-const reactions = ['LMAO', 'wait WHAT 😭', "okay that's actually wild"];
+const reactions = ['LMAO', 'wait WHAT 😭', "okay that's actually wild", 'bro that is cinema'];
 
 const packs = {
   greet: [
-    'Йо! Я Лолли 🍭 Твой карманный хаос с вайбом аниме.',
-    'Приветик~ Я уже здесь и морально готова к твоим сюжетным твистам 😌',
+    'Yo! I\'m Lolly 🍭 your pocket anime chaos unit.',
+    'Hi hi~ I\'m online and emotionally overqualified for nonsense 😌',
+    'Welcome to the meme zone. Shoes off, brain optional.',
   ],
   sad: [
-    'Эй, иди сюда. Я с тобой 💜 Давай один маленький шаг — и уже победа.',
-    'Если день кусается — кусаем в ответ пледом и чаем. Ты не один(а).',
-    'Ох, держу тебя виртуально за руку. Вдох-выдох. Мы справимся, окей?',
+    'Hey, come here. You are not alone 💜 One tiny step is still a step.',
+    'Rough day? We fight back with water, food, and one manageable task.',
+    'Deep breath with me. Inhale... exhale... we got this, okay?',
   ],
   joke: [
-    'LMAO, ты только что поднял(а) уровень хаоса до S-ранга 😂',
-    'АХАХ, это звучит как побочный квест, который внезапно лучший в сезоне.',
-    'wait WHAT 😭 это уже не шутка, это искусство.',
+    'LMAO, that just upgraded chaos to S-tier 😂',
+    'That was so cursed it looped back to legendary.',
+    'wait WHAT 😭 this is not a joke, this is modern art.',
   ],
   serious: [
-    'Окей, режим serious: цель → 1 шаг → дедлайн. Поехали.',
-    'Без паники. Разбиваем на мини-квесты и закрываем по одному.',
-    'Собираюсь в режим "делаем дело". Что критично прямо сейчас?',
+    'Lock-in mode: goal → first step → timer. Let\'s move.',
+    'No panic. We split it into mini quests and clear one now.',
+    'Okay, serious arc. What is the most urgent thing?',
   ],
   neutral: [
-    'Ооо, звучит интересно 👀',
-    'Я тут. Продолжаем шоу?',
-    'Норм, ловлю мысль. Рассказывай дальше~',
-    'Это вайб. Мне нравится 😌',
+    'Ooo interesting 👀',
+    'I\'m listening. Continue the plot.',
+    'That\'s a vibe. Keep going~',
+    'Noted. Brain is processing at meme speed.',
   ],
   tease: [
-    'Ну ты и генератор сюжета, конечно 😏',
-    'Ты буквально пишешь мне новый сезон каждую минуту.',
-    'С тобой скука просто увольняется.',
+    'You are personally feeding the chaos economy 😏',
+    'You keep dropping side quests and I respect it.',
+    'With you, boredom never survives.',
   ],
 };
 
 const moodWords = {
-  sad: [
-    'груст',
-    'печал',
-    'плохо',
-    'депресс',
-    'тяжело',
-    'одиноко',
-    'устал',
-    'устала',
-    'cry',
-    'sad',
-    'плачу',
-    'больно',
-  ],
-  joke: ['ахах', 'хаха', 'лол', 'lmao', 'lol', 'мем', 'шутк', '😂', '🤣', 'rofl'],
-  serious: ['серьез', 'важно', 'работ', 'задач', 'дедлайн', 'срок', 'проект', 'экзам', 'надо', 'нужно'],
+  sad: ['sad', 'down', 'hurt', 'cry', 'lonely', 'bad day', 'tired', 'depressed', 'груст', 'плохо'],
+  joke: ['lol', 'lmao', 'haha', 'meme', 'joke', 'ахах', 'лол', '😂', '🤣'],
+  serious: ['important', 'serious', 'work', 'task', 'deadline', 'exam', 'need help', 'focus', 'project'],
 };
 
 function pick(arr) {
@@ -78,9 +65,9 @@ function addMessage(role, text, extraClass = '') {
 }
 
 function detectMood(text) {
-  const t = text.toLowerCase();
+  const lower = text.toLowerCase();
+  const has = (list) => list.some((w) => lower.includes(w));
 
-  const has = (list) => list.some((w) => t.includes(w));
   if (has(moodWords.sad)) return 'sad';
   if (has(moodWords.joke)) return 'joke';
   if (has(moodWords.serious)) return 'serious';
@@ -88,54 +75,58 @@ function detectMood(text) {
 }
 
 function maybeMemoryCallback() {
-  if (state.userHistory.length < 2 || Math.random() > 0.28) return '';
+  if (state.userHistory.length < 2 || Math.random() > 0.3) return '';
 
   const prev = state.userHistory[state.userHistory.length - 2];
   if (!prev || prev.length < 8) return '';
 
   const short = prev.length > 44 ? `${prev.slice(0, 44)}...` : prev;
-  return ` Кстати, ты раньше говорил(а): «${short}». Я запомнила 😌`;
+  return ` Also, earlier you said: "${short}". Lore remembered ✅`;
 }
 
 function maybeReaction() {
-  return Math.random() < 0.18 ? ` ${pick(reactions)}` : '';
+  return Math.random() < 0.2 ? ` ${pick(reactions)}` : '';
 }
 
 function maybeTease() {
-  return Math.random() < 0.22 ? ` ${pick(packs.tease)}` : '';
+  return Math.random() < 0.24 ? ` ${pick(packs.tease)}` : '';
 }
 
 function buildReply(userText) {
-  const t = userText.toLowerCase().trim();
-  const mood = detectMood(t);
+  const text = userText.toLowerCase().trim();
+  const mood = detectMood(text);
 
-  if (/(кто ты|who are you|ты кто)/i.test(t)) {
-    return 'Я Лолли 🍭 аниме-компаньон: шучу, поддерживаю, иногда драматично машу руками.';
+  if (/(who are you|кто ты|ты кто)/i.test(text)) {
+    return 'I\'m Lolly 🍭 anime gremlin mode: jokes, support, and dramatic hand gestures.';
   }
 
-  if (/(помни|запомни|remember)/i.test(t)) {
-    return 'Запомнила, босс 😤📝 Теперь это часть лора нашей переписки.';
+  if (/(remember|запомни|remember this)/i.test(text)) {
+    return 'Saved. Added to our chaotic canon 📓✨';
   }
 
-  if (/(спасибо|thanks|thx)/i.test(t)) {
-    return 'Всегда пожалуйста~ я тут, чтобы делать день веселее ✨';
+  if (/(thanks|thank you|спасибо)/i.test(text)) {
+    return 'Anytime, bestie. I got you ✨';
+  }
+
+  if (/(github|repo|repository)/i.test(text)) {
+    return 'GitHub link is in the top-right button. Click it and vibe.';
+  }
+
+  if (/(roast me)/i.test(text)) {
+    return 'Respectfully: your tabs probably have tabs. Still iconic though.';
   }
 
   let base = pick(packs[mood] || packs.neutral);
-
-  if (mood === 'sad') {
-    return `${base}${maybeMemoryCallback()}`;
-  }
+  if (mood === 'sad') return `${base}${maybeMemoryCallback()}`;
 
   return `${base}${maybeReaction()}${maybeTease()}${maybeMemoryCallback()}`;
 }
 
 function botReply(userText) {
-  statusEl.textContent = 'typing...';
-  const typing = addMessage('system', 'Лолли печатает...', 'typing');
-
+  statusEl.textContent = 'brain buffering...';
+  const typing = addMessage('system', 'Lolly is typing...', 'typing');
   const reply = buildReply(userText);
-  const delay = 380 + Math.floor(Math.random() * 750);
+  const delay = 320 + Math.floor(Math.random() * 720);
 
   setTimeout(() => {
     typing.remove();
@@ -151,9 +142,8 @@ function handleSubmit(text) {
 
   addMessage('user', clean);
   state.userHistory.push(clean);
-  state.turns += 1;
 
-  if (state.userHistory.length > 12) {
+  if (state.userHistory.length > 14) {
     state.userHistory.shift();
   }
 
@@ -173,5 +163,5 @@ chipsEl.addEventListener('click', (e) => {
   handleSubmit(btn.textContent || '');
 });
 
-addMessage('system', 'Добро пожаловать в чат с Лолли. Здесь можно быть смешным, странным и живым.');
+addMessage('system', 'Welcome to Lolly chat. Be funny, chaotic, and a little dramatic.');
 addMessage('bot', pick(packs.greet));
